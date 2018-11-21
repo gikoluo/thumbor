@@ -5,5 +5,8 @@ services:
     image: apsl/thumbor
     volumes:
       - .:/app
+      - ./images:/images
+      - ./cache:/cache
+      - ./thumbor.conf:/etc/thumbor.conf
     ports:
-      - "8000:8000"
+      - "8181:8000"
