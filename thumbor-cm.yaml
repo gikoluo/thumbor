@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: thumbor
+  name: thumbor-conf
   labels:
     app: thumbor
 data:

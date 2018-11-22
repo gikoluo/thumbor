@@ -1,35 +1,35 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: thumbor
   labels:
     app: thumbor
-  name: thumbor
 spec:
-  replicas: 1
-  strategy:
-    type: Recreate
+  selector:
+    matchLabels:
+      app: thumbor
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: thumbor
     spec:
       containers:
-      - image: apsl/thumbor
-        name: app
+      - name: thumbor
+        image: apsl/thumbor
+        args:
+          - /docker-entrypoint.sh
         ports:
-        - containerPort: 8000
-        resources: {}
+          - containerPort: 8000
+            name: http
         volumeMounts:
-        - mountPath: /app
-          name: app-data
-        - mountPath: /etc/thumbor.conf
-          name: conf-etc-volume
-      restartPolicy: Always
+          - mountPath: /images
+            name: app-data
+        # - mountPath: /etc/thumbor.conf
+        #   name: conf-etc-volume
       volumes:
-      - name: app-data
-        persistentVolumeClaim:
-          claimName: thumbor-pvc
-      - name: conf-etc-volume
-        configMap:
-          name: thumbor-conf
+        - name: app-data
+          persistentVolumeClaim:
+            claimName: thumbor-pvc
+        # - name: conf-etc-volume
+        #   configMap:
+        #     name: thumbor-conf
