@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: thumbor
+  name: thumbor
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: thumbor
+    spec:
+      containers:
+      - image: apsl/thumbor
+        name: app
+        ports:
+        - containerPort: 8000
+        resources: {}
+        volumeMounts:
+        - mountPath: /app
+          name: app-data
+        - mountPath: /etc/thumbor.conf
+          name: conf-etc-volume
+      restartPolicy: Always
+      volumes:
+      - name: app-data
+        persistentVolumeClaim:
+          claimName: thumbor-pvc
+      - name: conf-etc-volume
+        configMap:
+          name: thumbor-conf
